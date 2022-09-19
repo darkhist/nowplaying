@@ -21,14 +21,35 @@ const getAccessToken = async () => {
   return await response.json();
 };
 
-const getTopTracks = async () => {
-  const { access_token } = await getAccessToken();
+const generateRandomOffset = () => Math.floor(Math.random() * 3200);
 
-  return fetch(`https://api.spotify.com/v1/me/top/tracks?limit=5`, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
+export const getSavedTracks = async () => {
+  const { access_token } = await getAccessToken();
+  const offset = generateRandomOffset();
+
+  return fetch(
+    `https://api.spotify.com/v1/me/tracks?limit=5&offset=${offset}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 };
 
-export default getTopTracks;
+export const getRecommendations = async (seedTracks: string) => {
+  const { access_token } = await getAccessToken();
+
+  return fetch(
+    `https://api.spotify.com/v1/recommendations?limit=5&seed_tracks=${seedTracks}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
