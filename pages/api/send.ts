@@ -4,10 +4,11 @@ import { TrackRecommendation } from "./recommendations";
 
 import { handleFetchError } from "../../util/handleFetchError";
 
-// const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
-// const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const APP_KEY = process.env.APP_KEY;
 
-// import twilio from "twilio";
+import twilio from "twilio";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -16,7 +17,6 @@ const url = dev
   : process.env.PROD_RECOMMENDATIONS_ENDPOINT!;
 
 const format = (trackRecommendations: TrackRecommendation[]) => {
-  // TODO: Replace with user provided name
   let body = `\nGood morning, Quinn ☀️
 Here are your track recommendations for today:
 `;
@@ -29,7 +29,9 @@ Here are your track recommendations for today:
   return body;
 };
 
-const handler = async (_: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const key = req.headers.authorization?.split(" ")[1] || undefined;
+
   const recommendationsResponse = await fetch(url);
   const { status } = recommendationsResponse;
 
@@ -44,24 +46,24 @@ const handler = async (_: NextApiRequest, res: NextApiResponse) => {
   const recommendations: TrackRecommendation[] =
     await recommendationsResponse.json();
 
-  const body = format(recommendations);
-  console.log(body);
-
-  // TODO: Uncomment to send SMS
-  // const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
-  //   region: "us1",
-  //   edge: "ashburn",
-  // });
-
-  // TODO: Replace with user provided phone number
-  // client.messages
-  //   .create({
-  //     to: process.env.PHONE_NUMBER!,
-  //     from: process.env.TWILIO_PHONE_NUMBER!,
-  //     body,
-  //   })
-  //   .then(({ status }) => console.log(`Message ${status}`));
-  return res.status(200).json(body);
+  try {
+    if (key !== APP_KEY || key === undefined) {
+      res.status(403).json({ msg: "Forbidden" });
+    } else {
+      const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
+        region: "us1",
+        edge: "ashburn",
+      });
+      client.messages.create({
+        to: process.env.PHONE_NUMBER!,
+        from: process.env.TWILIO_PHONE_NUMBER!,
+        body: format(recommendations),
+      });
+      res.status(200).json({ msg: "Recommendations Delivered 🎉" });
+    }
+  } catch (err) {
+    res.status(500);
+  }
 };
 
 export default handler;
