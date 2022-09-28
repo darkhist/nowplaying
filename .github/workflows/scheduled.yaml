@@ -1,11 +1,11 @@
 name: daily-cron-job
 on:
   schedule:
-    # every day @ 8 AM
     - cron: "0 8 * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
       - name: daily-cron-job
         env:
