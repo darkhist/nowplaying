@@ -1,17 +1,12 @@
 name: daily-cron-job
-on:
-  schedule:
-    - cron: "0 8 * * *"
+on: push
 jobs:
   cron:
-    runs-on: ubuntu-latest
     environment: Production
+    runs-on: ubuntu-latest
     steps:
-      - name: daily-cron-job
-        env:
-          ENDPOINT: ${{ secrets.ENDPOINT }}
-          ACTION_KEY: ${{ secrets.ACTION_KEY }}
+      - name: send
         run: |
           curl --request POST \
-          --url '$ENDPOINT' \
-          --header 'Authorization: Bearer $ACTION_KEY'
+          --url ${{ secrets.ENDPOINT }} \
+          --header 'Authorization: Bearer ${{ secrets.ACTION_KEY }}'
