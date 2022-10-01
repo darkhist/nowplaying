@@ -1,5 +1,7 @@
 name: daily-cron-job
-on: push
+on:
+  schedule:
+    - cron: "0 8 * * *"
 jobs:
   cron:
     environment: Production
