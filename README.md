@@ -1,23 +1,8 @@
 # nowplaying 🎧
 
-> Personalized Spotify track recommendations sent to you every morning via SMS :-)
+| ⚠️ This project is currently in private beta |
+| -------------------------------------------- |
 
-## Getting Started
+## About
 
-1. Clone
-
-```
-git clone https://github.com/darkhist/nowplaying.git
-```
-
-2. Install
-
-```
-yarn
-```
-
-## Develop
-
-```
-yarn dev
-```
+Personalized Spotify track recommendations sent to your phone every morning :-)
