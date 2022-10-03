@@ -2,13 +2,22 @@
 .subtitle {
   display: flex;
   justify-content: center;
+  font-weight: bold;
   color: white;
-  padding: 0 2rem;
+}
+
+.title {
+  margin: 6rem 0 0 0;
+}
+
+.subtitle {
+  font-style: italic;
 }
 
 .img {
   display: flex;
   justify-content: center;
+  margin: 3rem 2rem;
   @media screen and (min-width: 768px) {
     margin: 4rem 0;
   }

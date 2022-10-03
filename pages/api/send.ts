@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 
+import { Response } from "./index";
 import { TrackRecommendation } from "./recommendations";
 
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
@@ -40,7 +41,7 @@ const sendMessage = async (recommendations: TrackRecommendation[]) =>
     body: format(recommendations),
   });
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   const key = req.headers.authorization?.split(" ")[1] || undefined;
   const recommendationsResponse = await fetch(url);
 

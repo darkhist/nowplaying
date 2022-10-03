@@ -11,7 +11,7 @@ const Home = () => (
     </Head>
     <main>
       <h1 className={styles.title}>nowplaying</h1>
-      <p className={styles.subtitle}>private beta</p>
+      <p className={styles.subtitle}>(private beta)</p>
       <div className={styles.img}>
         <Image
           src="/images/gm.jpg"
