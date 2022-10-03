@@ -1,0 +1,19 @@
+.title,
+.subtitle {
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 0 2rem;
+}
+
+.img {
+  display: flex;
+  justify-content: center;
+  @media screen and (min-width: 768px) {
+    margin: 4rem 0;
+  }
+}
+
+.dot {
+  padding: 0 8px;
+}
